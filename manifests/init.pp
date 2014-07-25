@@ -37,7 +37,13 @@ class apt(
   $update_timeout       = undef,
   $update_tries         = undef,
   $sources              = undef,
-  $fancy_progress       = undef
+  $builddeps            = undef,
+  $forces               = undef,
+  $keys                 = undef,
+  $pins                 = undef,
+  $holds                = undef,
+  $ppas                 = undef,
+  $fancy_progress       = undef,
 ) {
 
   if $::osfamily != 'Debian' {
@@ -175,5 +181,41 @@ class apt(
   if $sources != undef {
     validate_hash($sources)
     create_resources('apt::source', $sources)
+  }
+
+  # manage builddeps if present
+  if $builddeps != undef {
+    validate_hash($builddeps)
+    create_resources('apt::builddep', $builddeps)
+  }
+
+  # manage forces if present
+  if $forces != undef {
+    validate_hash($forces)
+    create_resources('apt::force', $forces)
+  }
+
+  # manage keys if present
+  if $keys != undef {
+    validate_hash($keys)
+    create_resources('apt::key', $keys)
+  }
+
+  # manage pins if present
+  if $pins != undef {
+    validate_hash($pins)
+    create_resources('apt::pin', $pins)
+  }
+
+  # manage holds if present
+  if $holds != undef {
+    validate_hash($holds)
+    create_resources('apt::hold', $holds)
+  }
+
+  # manage ppas if present
+  if $ppas != undef {
+    validate_hash($ppas)
+    create_resources('apt::ppa', $ppas)
   }
 }
